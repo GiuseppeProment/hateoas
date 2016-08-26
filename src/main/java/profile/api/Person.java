@@ -1,4 +1,4 @@
-package net.exchangesolutions.veo.entity;
+package profile.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class Person {
 	@Column
 	private String password;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "people")
+	@OneToMany(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Phone> phones = new ArrayList<>();
 	

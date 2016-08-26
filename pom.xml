@@ -5,11 +5,10 @@
 
 	<groupId>profile.api</groupId>
 	<artifactId>profile</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>profile</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Code challenge</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -56,4 +55,5 @@
 	</build>
 
 
+	<version>1.0.0</version>
 </project>

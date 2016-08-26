@@ -1,4 +1,4 @@
-package net.exchangesolutions.veo.entity;
+package profile.api;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
