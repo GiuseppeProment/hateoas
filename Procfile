@@ -1,1 +1,1 @@
-web: java -jar target/dependency/jetty-runner.jar --port $PORT target/realstate-api-1.war
+web: java -Dserver.port=7777 -jar target/profile-1.0.0.jar
