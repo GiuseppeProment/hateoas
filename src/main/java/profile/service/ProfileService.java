@@ -4,8 +4,8 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import profile.domain.Person;
@@ -29,8 +29,7 @@ public class ProfileService {
 		if ( ! person.isPresent() ) {
 			throw new UserNotFoundException();
 		};
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-		if ( ! person.get().getPassword().equals(encoder.encodePassword(password, ""))) {
+		if ( ! person.get().getPassword().equals(DigestUtils.md5Hex(password))) {
 			throw new UnauthorizedException();
 		}
 		return dtoFromEntity(person.get());
@@ -54,13 +53,12 @@ public class ProfileService {
 		if (repository.findByEmail(personDto.getEmail()).isPresent() ) {
 			throw new DuplicateEmailException();
 		};
-		Md5PasswordEncoder encoder = new Md5PasswordEncoder();
 		Person entity = entityFromDto(personDto);
 		entity.setCreated(new Date());
 		entity.setModified(new Date());
 		entity.setLast_login(new Date());
 		entity.setToken( UUID.randomUUID().toString() );
-		entity.setPassword(encoder.encodePassword( personDto.getPassword(),"") );
+		entity.setPassword(DigestUtils.md5Hex( personDto.getPassword() ) );
 		return dtoFromEntity( repository.saveAndFlush(entity) );
 	}
 
