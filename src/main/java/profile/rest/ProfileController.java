@@ -36,6 +36,7 @@ public class ProfileController {
 				+ "</body></html>";		
 	}
 	
+	
     @RequestMapping(value="/cadastro", method=RequestMethod.POST )
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto cadastro(  @RequestBody PersonDto person ) throws DuplicateEmailException {
