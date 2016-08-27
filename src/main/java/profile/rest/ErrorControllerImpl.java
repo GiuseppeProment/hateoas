@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import profile.rest.exception.ErrorInfo;
 
+/**
+ * @author giuseppe
+ * My responsibility is handle generics errors.
+ */
 @RestController
 public class ErrorControllerImpl implements ErrorController {
 

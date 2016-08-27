@@ -19,34 +19,25 @@ import profile.rest.exception.UserNotFoundException;
 import profile.service.ProfileService;
 import profile.view.PersonDto;
 
+/**
+ * @author giuseppe
+ * My responsibility is take care of rest reception calling the service.
+ */
 @RestController
 public class ProfileController {
     
 	@Autowired
-	ProfileService service;
+	private ProfileService service;
 
-	@RequestMapping(value="/",produces=MediaType.TEXT_HTML_VALUE)
-	public String hello() {
-		return "<!DOCTYPE html>"
-				+ "<html><body>"
-				+ "<b>Available urls</b>"
-				+ "<p>/cadastro (post with json body)</p>"
-				+ "<p>/login/email/password</p>"
-				+ "<p>/perfil/userId</p>"
-				+ "</body></html>";		
-	}
-	
-	
-    @RequestMapping(value="/cadastro", method=RequestMethod.POST )
+	@RequestMapping(value="/cadastro", method=RequestMethod.POST )
     @ResponseStatus(HttpStatus.CREATED)
     public PersonDto cadastro(  @RequestBody PersonDto person ) throws DuplicateEmailException {
-    	return service.record(person);
+    	return service.cadastro(person);
     }
-    
+	
     @RequestMapping("/login/{email}/{password}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto login(  
-    		@PathVariable String email, @PathVariable String password ) throws UserNotFoundException, UnauthorizedException {
+    public PersonDto login( @PathVariable String email, @PathVariable String password ) throws UserNotFoundException, UnauthorizedException {
         return service.login(email,password);
     }
     
@@ -56,4 +47,15 @@ public class ProfileController {
         return service.perfil(token, userId);
     }
     
+    @RequestMapping(value="/",produces=MediaType.TEXT_HTML_VALUE)
+    public String hello() {
+    	return "<!DOCTYPE html>"
+    			+ "<html><body>"
+    			+ "<b>Available urls</b>"
+    			+ "<p>/cadastro (post with json body)</p>"
+    			+ "<p>/login/email/password</p>"
+    			+ "<p>/perfil/userId</p>"
+    			+ "</body></html>";		
+    }
 }
+
