@@ -13,11 +13,21 @@ import profile.rest.exception.UserNotFoundException;
 public class LoginRules {
 	public  void check(String password, Optional<Person> personFoundByEmail)
 			throws UserNotFoundException, UnauthorizedException {
-		if ( ! personFoundByEmail.isPresent() ) {
-			throw new UserNotFoundException();
-		};
+		
+		checkPersonFounded(personFoundByEmail);
+		checkIfThePasswordMatch(password, personFoundByEmail);
+	}
+
+	void checkIfThePasswordMatch(String password, Optional<Person> personFoundByEmail)
+			throws UnauthorizedException {
 		if ( ! personFoundByEmail.get().getPassword().equals(DigestUtils.md5Hex(password))) {
 			throw new UnauthorizedException();
 		}
+	}
+
+	void checkPersonFounded(Optional<Person> personFoundByEmail) throws UserNotFoundException {
+		if ( ! personFoundByEmail.isPresent() ) {
+			throw new UserNotFoundException();
+		};
 	}
 }

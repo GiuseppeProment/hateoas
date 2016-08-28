@@ -111,4 +111,8 @@ public class Person {
 		this.token = token;
 	}
 
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
 }

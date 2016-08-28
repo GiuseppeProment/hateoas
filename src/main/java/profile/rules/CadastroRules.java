@@ -10,7 +10,11 @@ import profile.rest.exception.DuplicateEmailException;
 @Component
 public class CadastroRules {
 	public  void check(Optional<Person> personFoundByEmail) throws DuplicateEmailException {
-		if (personFoundByEmail.isPresent() ) {
+		checkPersonMustNotExist(personFoundByEmail);
+	}
+
+	void checkPersonMustNotExist(Optional<Person> personFoundByEmail) throws DuplicateEmailException {
+		if ( personFoundByEmail.isPresent() ) {
 			throw new DuplicateEmailException();
 		};
 	}

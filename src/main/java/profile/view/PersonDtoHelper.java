@@ -34,9 +34,9 @@ public class PersonDtoHelper {
 		Person entity = new Person();
 		entity.setEmail(dto.getEmail());
 		entity.setName(dto.getName());
-		entity.setCreated(new Date());
-		entity.setModified(new Date());
-		entity.setLast_login(new Date());
+		entity.setCreated(dto.getCreated());
+		entity.setModified(dto.getModified());
+		entity.setLast_login(dto.getLast_login());
 		entity.setToken( dto.getToken() );
 		entity.setPassword( dto.getPassword() );
 		dto.getPhones()

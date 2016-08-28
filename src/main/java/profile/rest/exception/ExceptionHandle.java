@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
+ * My responsibility is handle meaningfull exceptions.
  * @author giuseppe
- * My responsibility is handle business exceptions.
  */
 @ControllerAdvice
 public class ExceptionHandle {
