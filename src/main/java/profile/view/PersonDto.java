@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -15,8 +16,11 @@ public class PersonDto {
 	private String name;
 	private String email;
 	private String password;
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
 	private Date created;
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
 	private Date modified;
+	@JsonFormat(pattern="dd-MM-yyyy HH:mm:ss")
 	private Date last_login;
 	private String token;
 	private List<PhoneDto> phones = new ArrayList<>();

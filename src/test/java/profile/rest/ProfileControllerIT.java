@@ -2,13 +2,16 @@ package profile.rest;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,6 +51,8 @@ public class ProfileControllerIT {
 	@Autowired
 	private PersonRepository repository;
 
+	private String today;
+
 	@Test
 	public void shouldLoginWithCorrectCredentialsTest() throws Exception {
 		recordPerson(buildWellKnonwPerson());
@@ -64,9 +69,9 @@ public class ProfileControllerIT {
 				.andExpect( jsonPath("$.password",not(equalTo("secret"))))
 				.andExpect( jsonPath("$.token").exists())
 				.andExpect( jsonPath("$.id").exists())
-				.andExpect( jsonPath("$.created").exists())
-				.andExpect( jsonPath("$.modified").exists())
-				.andExpect( jsonPath("$.last_login").exists())
+				.andExpect( jsonPath("$.created").value(startsWith(today)))
+				.andExpect( jsonPath("$.modified").value(startsWith(today)))
+				.andExpect( jsonPath("$.last_login").value(startsWith(today)))
 				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
 				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
@@ -119,9 +124,9 @@ public class ProfileControllerIT {
 				.andExpect( jsonPath("$.email",equalTo("jose@gmail.com")))
 				.andExpect( jsonPath("$.password").exists())
 				.andExpect( jsonPath("$.id").exists())
-				.andExpect( jsonPath("$.created").exists())
-				.andExpect( jsonPath("$.modified").exists())
-				.andExpect( jsonPath("$.last_login").exists())
+				.andExpect( jsonPath("$.created").value(startsWith(today)))
+				.andExpect( jsonPath("$.modified").value(startsWith(today)))
+				.andExpect( jsonPath("$.last_login").value(startsWith(today)))
 				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
 				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
@@ -197,9 +202,9 @@ public class ProfileControllerIT {
 				.andExpect( jsonPath("$.password",not(equalTo("my_secret_password"))))
 				.andExpect( jsonPath("$.token").exists())
 				.andExpect( jsonPath("$.id").exists())
-				.andExpect( jsonPath("$.created").exists())
-				.andExpect( jsonPath("$.modified").exists())
-				.andExpect( jsonPath("$.last_login").exists())
+				.andExpect( jsonPath("$.created").value(startsWith(today)))
+				.andExpect( jsonPath("$.modified").value(startsWith(today)))
+				.andExpect( jsonPath("$.last_login").value(startsWith(today)))
 				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
 				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
@@ -237,6 +242,7 @@ public class ProfileControllerIT {
 	public void setUp() {
 		mvc = MockMvcBuilders.webAppContextSetup(ctx).build();
 		repository.deleteAll();
+		today = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
 	}
 
 	private PersonDto buildWellKnonwPerson() {
