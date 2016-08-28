@@ -15,13 +15,14 @@ import profile.rest.exception.DuplicateEmailException;
 import profile.rest.exception.InvalidSessionException;
 import profile.rest.exception.InvalidTokenException;
 import profile.rest.exception.UnauthorizedException;
+import profile.rest.exception.UserIdNotFoundException;
 import profile.rest.exception.UserNotFoundException;
 import profile.service.ProfileService;
 import profile.view.PersonDto;
 
 /**
- * @author giuseppe
  * My responsibility is take care of rest reception calling the service.
+ * @author giuseppe
  */
 @RestController
 public class ProfileController {
@@ -43,7 +44,7 @@ public class ProfileController {
     
     @RequestMapping("/perfil/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto perfil( @RequestHeader("token") String token, @PathVariable String userId ) throws InvalidTokenException, InvalidSessionException {
+    public PersonDto perfil( @RequestHeader("token") String token, @PathVariable String userId ) throws InvalidTokenException, InvalidSessionException, UserIdNotFoundException {
         return service.perfil(token, userId);
     }
     

@@ -1,9 +1,7 @@
 package profile.view;
 
 import java.util.Date;
-import java.util.UUID;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
 import profile.domain.Person;
@@ -19,13 +17,13 @@ public class PersonDtoHelper {
 	public PersonDto dtoFromEntity(Person entity) {
 		PersonDto dto = new PersonDto();
 		dto.setId(entity.getId());
-		dto.setToken(entity.getToken());
 		dto.setCreated(entity.getCreated());
 		dto.setLast_login(entity.getLast_login());
 		dto.setModified(entity.getModified());
 		dto.setEmail(entity.getEmail());
 		dto.setName(entity.getName());
 		dto.setPassword(entity.getPassword());
+		dto.setToken(entity.getToken());
 		entity.getPhones()
 			.stream()
 			.forEach( e -> dto.getPhones().add(new PhoneDto( e.getDdd(), e.getNumber() ) ) );
@@ -39,8 +37,8 @@ public class PersonDtoHelper {
 		entity.setCreated(new Date());
 		entity.setModified(new Date());
 		entity.setLast_login(new Date());
-		entity.setToken( UUID.randomUUID().toString() );
-		entity.setPassword(DigestUtils.md5Hex( dto.getPassword() ) );
+		entity.setToken( dto.getToken() );
+		entity.setPassword( dto.getPassword() );
 		dto.getPhones()
 			.stream()
 			.forEach( d -> entity.getPhones().add(new Phone(d.getDdd(), d.getNumber())));

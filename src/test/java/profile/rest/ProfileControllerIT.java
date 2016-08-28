@@ -1,6 +1,6 @@
 package profile.rest;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,16 +58,17 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().isOk() )
-				.andExpect( jsonPath("$.name",is("Jose")))
-				.andExpect( jsonPath("$.email",is("jose@gmail.com")))
+				.andExpect( jsonPath("$.name",equalTo("Jose")))
+				.andExpect( jsonPath("$.email",equalTo("jose@gmail.com")))
 				.andExpect( jsonPath("$.password").exists())
-				.andExpect( jsonPath("$.password",not(is("secret"))))
+				.andExpect( jsonPath("$.password",not(equalTo("secret"))))
+				.andExpect( jsonPath("$.token").exists())
 				.andExpect( jsonPath("$.id").exists())
 				.andExpect( jsonPath("$.created").exists())
 				.andExpect( jsonPath("$.modified").exists())
 				.andExpect( jsonPath("$.last_login").exists())
-				.andExpect( jsonPath("$.phones[0].ddd",is("11")))
-				.andExpect( jsonPath("$.phones[0].number",is("55890444")))
+				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
+				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
 		//@formatter:on
 	}
@@ -83,7 +83,7 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().is4xxClientError() )
-				.andExpect( jsonPath("$.mensagem",is("Usuário e/ou senha inválidos")))
+				.andExpect( jsonPath("$.mensagem",equalTo("Usuário e/ou senha inválidos")))
 		;
 		//@formatter:on
 	}
@@ -98,13 +98,13 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().is4xxClientError() )
-				.andExpect( jsonPath("$.mensagem",is("Usuário e/ou senha inválidos")))
+				.andExpect( jsonPath("$.mensagem",equalTo("Usuário e/ou senha inválidos")))
 		;
 		//@formatter:on
 	}
 	
 	@Test
-	public void shouldReceivePerfilWithCorrectTokenAndIdTest() throws Exception {
+	public void shouldReceivePerfilUsingCorrectTokenAndIdTest() throws Exception {
 		String personAsJson = recordPerson(buildWellKnonwPerson());
 		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
 		//@formatter:off
@@ -115,21 +115,21 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().isOk() )
-				.andExpect( jsonPath("$.name",is("Jose")))
-				.andExpect( jsonPath("$.email",is("jose@gmail.com")))
+				.andExpect( jsonPath("$.name",equalTo("Jose")))
+				.andExpect( jsonPath("$.email",equalTo("jose@gmail.com")))
 				.andExpect( jsonPath("$.password").exists())
 				.andExpect( jsonPath("$.id").exists())
 				.andExpect( jsonPath("$.created").exists())
 				.andExpect( jsonPath("$.modified").exists())
 				.andExpect( jsonPath("$.last_login").exists())
-				.andExpect( jsonPath("$.phones[0].ddd",is("11")))
-				.andExpect( jsonPath("$.phones[0].number",is("55890444")))
+				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
+				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
 		//@formatter:on
 	}
 	
 	@Test
-	public void shouldNotReceivePerfilWithWrongTokenTest() throws Exception {
+	public void shouldNotReceivePerfilUsingWrongTokenTest() throws Exception {
 		String personAsJson = recordPerson(buildWellKnonwPerson());
 		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
 		//@formatter:off
@@ -140,28 +140,44 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().is4xxClientError() )
-				.andExpect( jsonPath("$.mensagem",is("Não autorizado")))
+				.andExpect( jsonPath("$.mensagem",equalTo("Não autorizado")))
 		;
 		//@formatter:on
 	}
 
 	@Test
-	public void shouldNotReceivePerfilWithWrongIdTest() throws Exception {
+	public void shouldNotReceivePerfilUsingWrongIdTest() throws Exception {
 		String personAsJson = recordPerson(buildWellKnonwPerson());
 		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
 		//@formatter:off
 		mvc
 			.perform( 
-				get("/perfil/"+"UU-wrong-id-UU")
+				get("/perfil/"+"ffffffff-ffff-ffff-ffff-ffffffffffff")
 				.header("token", person.getToken())
 				)
 				.andDo(print())
 				.andExpect( status().is4xxClientError() )
-				.andExpect( jsonPath("$.mensagem",is("Não autorizado")))
+				.andExpect( jsonPath("$.mensagem",equalTo("User id não encontrado")))
 		;
 		//@formatter:on
 	}
 
+	@Test
+	public void shouldNotReceivePerfilWithoutTokenTest() throws Exception {
+		String personAsJson = recordPerson(buildWellKnonwPerson());
+		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
+		//@formatter:off
+		mvc
+			.perform( 
+				get("/perfil/"+person.getId())
+				)
+				.andDo(print())
+				.andExpect( status().is4xxClientError() )
+				.andExpect( jsonPath("$.mensagem",equalTo("Não autorizado")))
+		;
+		//@formatter:on
+	}
+	
 	@Test
 	public void shouldCreateNewPersonTest() throws Exception {
 		PersonDto person = buildWellKnonwPerson();
@@ -175,17 +191,17 @@ public class ProfileControllerIT {
 				)
 				.andDo(print())
 				.andExpect( status().isCreated() )
-				.andExpect( jsonPath("$.name",is("Jose")))
-				.andExpect( jsonPath("$.email",is("jose@gmail.com")))
+				.andExpect( jsonPath("$.name",equalTo("Jose")))
+				.andExpect( jsonPath("$.email",equalTo("jose@gmail.com")))
 				.andExpect( jsonPath("$.password").exists())
-				.andExpect( jsonPath("$.password",not(is("my_secret_password"))))
+				.andExpect( jsonPath("$.password",not(equalTo("my_secret_password"))))
 				.andExpect( jsonPath("$.token").exists())
 				.andExpect( jsonPath("$.id").exists())
 				.andExpect( jsonPath("$.created").exists())
 				.andExpect( jsonPath("$.modified").exists())
 				.andExpect( jsonPath("$.last_login").exists())
-				.andExpect( jsonPath("$.phones[0].ddd",is("11")))
-				.andExpect( jsonPath("$.phones[0].number",is("55890444")))
+				.andExpect( jsonPath("$.phones[0].ddd",equalTo("11")))
+				.andExpect( jsonPath("$.phones[0].number",equalTo("55890444")))
 		;
 		//@formatter:on
 	}
@@ -202,7 +218,7 @@ public class ProfileControllerIT {
 				)
 			.andDo(print())
 			.andExpect(status().is4xxClientError())
-			.andExpect(jsonPath("$.mensagem", is("E-mail já existente")));
+			.andExpect(jsonPath("$.mensagem", equalTo("E-mail já existente")));
 		//@formatter:on
 	}
 

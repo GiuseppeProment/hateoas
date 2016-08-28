@@ -21,6 +21,23 @@ public class PersonDto {
 	private String token;
 	private List<PhoneDto> phones = new ArrayList<>();
 	
+	public PersonDto(PersonDto inDto) {
+		setId(inDto.getId());
+		setToken(inDto.getToken());
+		setCreated(inDto.getCreated());
+		setLast_login(inDto.getLast_login());
+		setModified(inDto.getModified());
+		setEmail(inDto.getEmail());
+		setName(inDto.getName());
+		setPassword(inDto.getPassword());
+		setToken(inDto.getToken());
+		inDto.getPhones()
+			.stream()
+			.forEach( e -> getPhones().add(new PhoneDto( e.getDdd(), e.getNumber() ) ) );
+	}
+	public PersonDto() {
+		super();
+	}
 	public String getName() {
 		return name;
 	}
@@ -75,5 +92,5 @@ public class PersonDto {
 	public void setId(UUID id) {
 		this.id = id;
 	}
-
+	
 }
