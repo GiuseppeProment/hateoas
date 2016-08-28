@@ -11,12 +11,12 @@ import profile.rest.exception.UserNotFoundException;
 
 @Component
 public class LoginRules {
-	public  void check(String password, Optional<Person> person)
+	public  void check(String password, Optional<Person> personFoundByEmail)
 			throws UserNotFoundException, UnauthorizedException {
-		if ( ! person.isPresent() ) {
+		if ( ! personFoundByEmail.isPresent() ) {
 			throw new UserNotFoundException();
 		};
-		if ( ! person.get().getPassword().equals(DigestUtils.md5Hex(password))) {
+		if ( ! personFoundByEmail.get().getPassword().equals(DigestUtils.md5Hex(password))) {
 			throw new UnauthorizedException();
 		}
 	}

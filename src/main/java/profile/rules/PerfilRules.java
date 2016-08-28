@@ -12,16 +12,17 @@ import profile.rest.exception.InvalidTokenException;
 public class PerfilRules {
 
 	private static final int TOKEN_EXPIRATION_IN_MINUTES = 30;
+	private static final int TOKEN_EXPIRATION_IN_MILISECONDS = TOKEN_EXPIRATION_IN_MINUTES*60*1000;
 	
-	public  void check(String userIdAsString, Optional<Person> person)
+	public  void check(String userIdAsString, Optional<Person> personFoundByToken)
 			throws InvalidTokenException, InvalidSessionException {
-		if ( ! person.isPresent() ) {
+		if ( ! personFoundByToken.isPresent() ) {
 			throw new InvalidTokenException();
 		}
-		if ( ! person.get().id.toString().equals(userIdAsString)) {
+		if ( ! personFoundByToken.get().getId().toString().equals(userIdAsString)) {
 			throw new InvalidTokenException();
 		}
-		if ( (System.currentTimeMillis() - person.get().getLast_login().getTime())/1000/60 > TOKEN_EXPIRATION_IN_MINUTES ) {
+		if ( (System.currentTimeMillis() - personFoundByToken.get().getLast_login().getTime()) > TOKEN_EXPIRATION_IN_MILISECONDS ) {
 			throw new InvalidSessionException();
 		}
 	}

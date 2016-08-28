@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,12 @@ import profile.view.PhoneDto;
 
 
 /**
- * @author giuseppe Spring tests Looks more like a integration tests...
+ * @author giuseppe 
+ * Spring tests Looks more like a integration tests... then this is a Integration Test.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProfileControllerTest {
+public class ProfileControllerIT {
 
 	@Autowired
 	private WebApplicationContext ctx;
@@ -48,7 +50,7 @@ public class ProfileControllerTest {
 	private PersonRepository repository;
 
 	@Test
-	public void loginSuccessfullyTest() throws Exception {
+	public void shouldLoginWithCorrectCredentialsTest() throws Exception {
 		recordPerson(buildWellKnonwPerson());
 		//@formatter:off
 		mvc
@@ -72,7 +74,37 @@ public class ProfileControllerTest {
 	}
 	
 	@Test
-	public void perfilSuccessfullyTest() throws Exception {
+	public void shouldNotLoginWithWrongPasswordTest() throws Exception {
+		recordPerson(buildWellKnonwPerson());
+		//@formatter:off
+		mvc
+			.perform( 
+				get("/login/jose@gmail.com/wrong-password")
+				)
+				.andDo(print())
+				.andExpect( status().is4xxClientError() )
+				.andExpect( jsonPath("$.mensagem",is("Usuário e/ou senha inválidos")))
+		;
+		//@formatter:on
+	}
+	
+	@Test
+	public void shouldNotLoginWithWrongEmailTest() throws Exception {
+		recordPerson(buildWellKnonwPerson());
+		//@formatter:off
+		mvc
+			.perform( 
+				get("/login/unkonow@gmail.com/secret")
+				)
+				.andDo(print())
+				.andExpect( status().is4xxClientError() )
+				.andExpect( jsonPath("$.mensagem",is("Usuário e/ou senha inválidos")))
+		;
+		//@formatter:on
+	}
+	
+	@Test
+	public void shouldReceivePerfilWithCorrectTokenAndIdTest() throws Exception {
 		String personAsJson = recordPerson(buildWellKnonwPerson());
 		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
 		//@formatter:off
@@ -95,9 +127,43 @@ public class ProfileControllerTest {
 		;
 		//@formatter:on
 	}
+	
+	@Test
+	public void shouldNotReceivePerfilWithWrongTokenTest() throws Exception {
+		String personAsJson = recordPerson(buildWellKnonwPerson());
+		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
+		//@formatter:off
+		mvc
+			.perform( 
+				get("/perfil/"+person.getId())
+				.header("token", "wrong-token")
+				)
+				.andDo(print())
+				.andExpect( status().is4xxClientError() )
+				.andExpect( jsonPath("$.mensagem",is("Não autorizado")))
+		;
+		//@formatter:on
+	}
 
 	@Test
-	public void recordUserSuccessfullyTest() throws Exception {
+	public void shouldNotReceivePerfilWithWrongIdTest() throws Exception {
+		String personAsJson = recordPerson(buildWellKnonwPerson());
+		PersonDto person = mapper.readValue(personAsJson, PersonDto.class);
+		//@formatter:off
+		mvc
+			.perform( 
+				get("/perfil/"+"UU-wrong-id-UU")
+				.header("token", person.getToken())
+				)
+				.andDo(print())
+				.andExpect( status().is4xxClientError() )
+				.andExpect( jsonPath("$.mensagem",is("Não autorizado")))
+		;
+		//@formatter:on
+	}
+
+	@Test
+	public void shouldCreateNewPersonTest() throws Exception {
 		PersonDto person = buildWellKnonwPerson();
 		String personAsJson = mapper.writeValueAsString(person);
 		//@formatter:off
@@ -125,7 +191,7 @@ public class ProfileControllerTest {
 	}
 
 	@Test
-	public void recordWithDuplicateEmailTest() throws Exception {
+	public void shouldReceiveDuplicateEmailErrorOnCreationTest() throws Exception {
 		recordPerson(buildWellKnonwPerson());
 		String personAsJson = mapper.writeValueAsString(buildWellKnonwPerson());
 		//@formatter:off
@@ -137,6 +203,17 @@ public class ProfileControllerTest {
 			.andDo(print())
 			.andExpect(status().is4xxClientError())
 			.andExpect(jsonPath("$.mensagem", is("E-mail já existente")));
+		//@formatter:on
+	}
+
+	@Test
+	public void shouldReturnTheStandardJsonObjectForGenericErros() throws Exception {
+		//@formatter:off
+		mvc.perform( 
+				get("/this-doesnt-exist")
+				)
+			.andDo(print())
+			.andExpect(status().is4xxClientError());
 		//@formatter:on
 	}
 

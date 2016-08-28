@@ -17,7 +17,7 @@ public class Person {
 
 	@Id
 	@GeneratedValue
-	public UUID id;
+	private UUID id;
 
 	@Column
 	private String name;
