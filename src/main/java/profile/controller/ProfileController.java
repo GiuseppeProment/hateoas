@@ -1,4 +1,4 @@
-package profile.rest;
+package profile.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import profile.rest.exception.DuplicateEmailException;
-import profile.rest.exception.InvalidSessionException;
-import profile.rest.exception.InvalidTokenException;
-import profile.rest.exception.UnauthorizedException;
-import profile.rest.exception.UserIdNotFoundException;
-import profile.rest.exception.UserNotFoundException;
+import profile.dto.PersonDto;
+import profile.exception.DuplicateEmailException;
+import profile.exception.InvalidSessionException;
+import profile.exception.InvalidTokenException;
+import profile.exception.UnauthorizedException;
+import profile.exception.UserIdNotFoundException;
+import profile.exception.UserNotFoundException;
 import profile.service.ProfileService;
-import profile.view.PersonDto;
 
 /**
  * My responsibility is take care of rest reception calling the service.

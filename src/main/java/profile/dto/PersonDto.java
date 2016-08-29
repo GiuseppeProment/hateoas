@@ -1,4 +1,4 @@
-package profile.view;
+package profile.dto;
 
 import java.util.ArrayList;
 import java.util.Date;

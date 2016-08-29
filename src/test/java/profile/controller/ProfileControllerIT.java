@@ -1,4 +1,4 @@
-package profile.rest;
+package profile.controller;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -27,9 +27,9 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import profile.dto.PersonDto;
+import profile.dto.PhoneDto;
 import profile.repository.PersonRepository;
-import profile.view.PersonDto;
-import profile.view.PhoneDto;
 
 
 /**

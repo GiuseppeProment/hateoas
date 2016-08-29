@@ -1,4 +1,4 @@
-package profile.rest.exception;
+package profile.exception;
 
 import javax.servlet.http.HttpServletRequest;
 

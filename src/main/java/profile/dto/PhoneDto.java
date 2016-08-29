@@ -1,4 +1,4 @@
-package profile.view;
+package profile.dto;
 
 public class PhoneDto {
 

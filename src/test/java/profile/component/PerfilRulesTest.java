@@ -1,4 +1,4 @@
-package profile.rules;
+package profile.component;
 
 import java.util.Date;
 import java.util.Optional;
@@ -6,17 +6,19 @@ import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 
+import profile.component.PerfilRulesImpl;
 import profile.domain.Person;
-import profile.rest.exception.InvalidSessionException;
-import profile.rest.exception.InvalidTokenException;
-import profile.rest.exception.UserIdNotFoundException;
+import profile.exception.InvalidSessionException;
+import profile.exception.InvalidTokenException;
+import profile.exception.UserIdNotFoundException;
 import profile.service.SecurityService;
+import profile.service.SecurityServiceImpl;
 
 public class PerfilRulesTest {
 
 	private static final String INVALID_TOKEN = "invalid-token";
 	private static final String VALID_TOKEN = "valid-token";
-	private PerfilRules rules;
+	private PerfilRulesImpl rules;
 	private Person person;
 
 	@Test
@@ -53,8 +55,8 @@ public class PerfilRulesTest {
 	
 	@Before
 	public void setup() {
-		SecurityService sec = new SecurityService();
-		rules = new PerfilRules();
+		SecurityService sec = new SecurityServiceImpl();
+		rules = new PerfilRulesImpl();
 		person = new Person();
 		person.setToken( sec.digest(VALID_TOKEN));
 	}

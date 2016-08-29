@@ -1,4 +1,4 @@
-package profile.rules;
+package profile.component;
 
 import java.util.Optional;
 
@@ -6,11 +6,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
 import profile.domain.Person;
-import profile.rest.exception.UnauthorizedException;
-import profile.rest.exception.UserNotFoundException;
+import profile.exception.UnauthorizedException;
+import profile.exception.UserNotFoundException;
 
 @Component
-public class LoginRules {
+public class LoginRulesImpl implements LoginRules {
+	@Override
 	public  void check(String password, Optional<Person> personFoundByEmail)
 			throws UserNotFoundException, UnauthorizedException {
 		

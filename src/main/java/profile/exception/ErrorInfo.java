@@ -1,4 +1,4 @@
-package profile.rest.exception;
+package profile.exception;
 
 public class ErrorInfo {
     public final String mensagem;

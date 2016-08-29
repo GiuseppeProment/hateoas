@@ -1,4 +1,4 @@
-package profile.view;
+package profile.dto;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -12,6 +12,9 @@ import org.junit.Test;
 
 import profile.domain.Person;
 import profile.domain.Phone;
+import profile.dto.PersonDto;
+import profile.dto.PersonDtoHelper;
+import profile.dto.PhoneDto;
 
 public class PersonDtoHelperTest extends PersonDtoHelper {
 

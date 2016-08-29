@@ -1,16 +1,17 @@
-package profile.rules;
+package profile.component;
 
 import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import profile.component.CadastroRulesImpl;
 import profile.domain.Person;
-import profile.rest.exception.DuplicateEmailException;
+import profile.exception.DuplicateEmailException;
 
 public class CadastroRulesTest {
 
-	private CadastroRules rules;
+	private CadastroRulesImpl rules;
 
 	@Test(expected=DuplicateEmailException.class)
 	public void checkPersonMustNotExistShouldNotPass() throws Exception {
@@ -24,6 +25,6 @@ public class CadastroRulesTest {
 
 	@Before
 	public void setup() {
-		rules = new CadastroRules();
+		rules = new CadastroRulesImpl();
 	}
 }

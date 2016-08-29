@@ -1,4 +1,4 @@
-package profile.rules;
+package profile.component;
 
 import java.util.Optional;
 
@@ -6,16 +6,17 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
 import profile.domain.Person;
-import profile.rest.exception.InvalidSessionException;
-import profile.rest.exception.InvalidTokenException;
-import profile.rest.exception.UserIdNotFoundException;
+import profile.exception.InvalidSessionException;
+import profile.exception.InvalidTokenException;
+import profile.exception.UserIdNotFoundException;
 
 @Component
-public class PerfilRules {
+public class PerfilRulesImpl implements PerfilRules {
 
 	static final int TOKEN_EXPIRATION_IN_MINUTES = 30;
 	static final int TOKEN_EXPIRATION_IN_MILISECONDS = TOKEN_EXPIRATION_IN_MINUTES*60*1000;
 	
+	@Override
 	public  void check(Optional<Person> person, String token)
 			throws  InvalidTokenException, InvalidSessionException, UserIdNotFoundException {
 		
