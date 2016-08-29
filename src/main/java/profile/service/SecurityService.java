@@ -1,18 +1,9 @@
 package profile.service;
 
-import java.util.UUID;
+public interface SecurityService {
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.stereotype.Service;
+	String generateToken();
 
-@Service
-public class SecurityService {
-	public String generateToken() {
-		return UUID.randomUUID().toString();
-	}
+	String digest(String data);
 
-	public String digest(String data) {
-		return DigestUtils.md5Hex(data);
-	}
-	
 }
