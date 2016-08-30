@@ -12,12 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import profile.dto.PersonDto;
-import profile.exception.DuplicateEmailException;
-import profile.exception.InvalidSessionException;
-import profile.exception.InvalidTokenException;
-import profile.exception.UnauthorizedException;
-import profile.exception.UserIdNotFoundException;
-import profile.exception.UserNotFoundException;
 import profile.service.ProfileService;
 
 /**
@@ -32,19 +26,19 @@ public class ProfileController {
 
 	@RequestMapping(value="/cadastro", method=RequestMethod.POST )
     @ResponseStatus(HttpStatus.CREATED)
-    public PersonDto cadastro(  @RequestBody PersonDto person ) throws DuplicateEmailException {
+    public PersonDto cadastro(  @RequestBody PersonDto person ) {
     	return service.cadastro(person);
     }
 	
     @RequestMapping("/login/{email}/{password}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto login( @PathVariable String email, @PathVariable String password ) throws UserNotFoundException, UnauthorizedException {
+    public PersonDto login( @PathVariable String email, @PathVariable String password ) {
         return service.login(email,password);
     }
     
     @RequestMapping("/perfil/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public PersonDto perfil( @RequestHeader("token") String token, @PathVariable String userId ) throws InvalidTokenException, InvalidSessionException, UserIdNotFoundException {
+    public PersonDto perfil( @RequestHeader("token") String token, @PathVariable String userId ) {
         return service.perfil(token, userId);
     }
     

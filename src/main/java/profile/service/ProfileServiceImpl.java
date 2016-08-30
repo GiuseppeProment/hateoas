@@ -13,12 +13,6 @@ import profile.component.PerfilRules;
 import profile.domain.Person;
 import profile.dto.PersonDto;
 import profile.dto.PersonDtoHelper;
-import profile.exception.DuplicateEmailException;
-import profile.exception.InvalidSessionException;
-import profile.exception.InvalidTokenException;
-import profile.exception.UnauthorizedException;
-import profile.exception.UserIdNotFoundException;
-import profile.exception.UserNotFoundException;
 import profile.repository.PersonRepository;
 
 /**
@@ -36,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Autowired private SecurityService security;
 	
 	@Override
-	public PersonDto cadastro(PersonDto personDto) throws DuplicateEmailException {
+	public PersonDto cadastro(PersonDto personDto) {
 		PersonDto localDto = new PersonDto( personDto ); 
 		Optional<Person> person = repository.findByEmail(personDto.getEmail());
 		cadastroRules.check(person);
@@ -48,7 +42,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public PersonDto login(String email, String password) throws UserNotFoundException, UnauthorizedException {
+	public PersonDto login(String email, String password) {
 		Optional<Person> person = repository.findByEmail(email);
 		loginRules.check(password, person);
 		String token = security.generateToken();
@@ -60,7 +54,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public PersonDto perfil(String token, String userIdAsString ) throws InvalidTokenException, InvalidSessionException, UserIdNotFoundException {
+	public PersonDto perfil(String token, String userIdAsString ) {
 		Optional<Person> person = repository.findById( UUID.fromString(userIdAsString) );
 		perfilRules.check(person, token);
 		return dtoHelper.dtoFromEntity(person.get());
