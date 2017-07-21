@@ -29,7 +29,7 @@ public class PerfilRulesTest {
 
 	@Test(expected=InvalidSessionException.class)
 	public void checkIfTheLoginExpiredShouldNotPass() throws Exception {
-		person.setLast_login(new Date(System.currentTimeMillis()-((rules.TOKEN_EXPIRATION_IN_MINUTES+1)*60*1000)));
+		person.setLast_login(new Date(System.currentTimeMillis()-((PerfilRulesImpl.TOKEN_EXPIRATION_IN_MINUTES+1)*60*1000)));
 		rules.checkIfTheLoginExpired(Optional.of(person));
 	}
 

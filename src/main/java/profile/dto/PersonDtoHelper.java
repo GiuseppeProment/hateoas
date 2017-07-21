@@ -1,7 +1,5 @@
 package profile.dto;
 
-import java.util.Date;
-
 import org.springframework.stereotype.Component;
 
 import profile.domain.Person;
