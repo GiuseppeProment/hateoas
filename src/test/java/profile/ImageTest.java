@@ -25,8 +25,8 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import profile.domain.Image;
-import profile.domain.Product;
 import profile.repository.ImageRepository;
+import profile.service.FixtureService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -43,6 +43,9 @@ public class ImageTest {
 	@Autowired
 	private ImageRepository repository;
 
+	@Autowired
+	private FixtureService fixture;
+	
 	private byte[] createImageAsJson(String type) throws Exception {
 		return mapper.writeValueAsBytes(new Image(type));
 	}
@@ -54,6 +57,7 @@ public class ImageTest {
 	@Before
 	public void setUp() {
 		mvc = MockMvcBuilders.webAppContextSetup(ctx).build();
+		fixture.initializeDatabase();
 	}
 	
 	@Test
@@ -80,12 +84,11 @@ public class ImageTest {
 	
 	@Test
 	public void shouldDeleteImage() throws Exception {
-		repository.saveAndFlush( new Image("Old BlueTooth Image") );
-		Long id = repository.findFirstByType("Old BlueTooth Image").getId();
+		Long id = repository.findFirstByType("small").getId();
 		// @formatter:off
 		mvc
 			.perform( 
-					delete("/images/"+id)
+					delete("/images/{id}",id)
 					)
 			.andDo(print())
 			.andExpect( status().isNoContent() );
@@ -95,24 +98,23 @@ public class ImageTest {
 
 	@Test
 	public void shouldUpdateImage() throws Exception {
-		repository.saveAndFlush( new Image("old BlueTooth Image") );
-		Long id = repository.findFirstByType("old BlueTooth Image").getId();
+		Long id = repository.findFirstByType("small").getId();
 		// @formatter:off
 		mvc
 			.perform( 
-					patch("/images/"+id)
-						.content( mapper.writeValueAsBytes(new Image("new BlueTooth Image")) )
+					patch("/images/{id}",id)
+						.content( mapper.writeValueAsBytes(new Image("extra small")) )
 						.contentType(MediaType.APPLICATION_JSON_UTF8)
 					)
 			.andExpect( status().isOk() );
 		// @formatter:on
 		Image updated = repository.findById(id);
-		assertThat(updated.getType(), equalTo("new BlueTooth Image"));
+		assertThat(updated.getType(), equalTo("extra small"));
 	}
 	
 	@After
 	public void tearDown() {
-		repository.deleteAll();
+		fixture.cleanDatabase();
 	}
 
 }

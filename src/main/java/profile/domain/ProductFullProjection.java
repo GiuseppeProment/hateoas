@@ -1,14 +1,11 @@
-package profile.repository;
+package profile.domain;
 
 import java.util.List;
 
 import org.springframework.data.rest.core.config.Projection;
 
-import profile.domain.Image;
-import profile.domain.Product;
-
-@Projection(name="embeded", types= {Product.class,Image.class})
-public interface ProductProjection {
+@Projection(name="full", types= {Product.class})
+public interface ProductFullProjection {
 	Long getId();
 	String getDescription();
 	String getName();
